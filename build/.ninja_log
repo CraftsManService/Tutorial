@@ -1,0 +1,9 @@
+# ninja log v7
+27	3724	8154399024807376	CMakeFiles/Tutorial.dir/src/main.cpp.obj	3c4d29a27ed16a13
+47	3173	8154399025007565	CMakeFiles/Tutorial.dir/src/gl.c.obj	f523e7a7d9adab6a
+3725	4144	8154399061788733	Tutorial.exe	a0fae5830d43ee35
+67	3432	8154399025213448	CMakeFiles/Tutorial.dir/src/stb_image_implementation.cpp.obj	5b13eee8a379cab9
+107	3209	8154399025613098	CMakeFiles/2d_Physics.dir/src/gl.c.obj	660cff7da3706ac1
+134	3377	8154399025883138	CMakeFiles/2d_Physics.dir/src/stb_image_implementation.cpp.obj	75e920fa5f3532aa
+16	1758	8164553208183993	CMakeFiles/2d_Physics.dir/src/2d_Physics.cpp.obj	438db419d500ab98
+1759	2013	8164553225622055	2d_Physics.exe	860dbafd2f48f642

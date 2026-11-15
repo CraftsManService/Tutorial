@@ -1,0 +1,38 @@
+[
+{
+  "directory": "C:/Users/Adam/Dev/Projects/Tutorial/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe -DGLFW_DLL -IC:/Users/Adam/Dev/Projects/Tutorial/include -g -std=gnu++17 -o CMakeFiles\\Tutorial.dir\\src\\main.cpp.obj -c C:\\Users\\Adam\\Dev\\Projects\\Tutorial\\src\\main.cpp",
+  "file": "C:/Users/Adam/Dev/Projects/Tutorial/src/main.cpp",
+  "output": "C:/Users/Adam/Dev/Projects/Tutorial/build/CMakeFiles/Tutorial.dir/src/main.cpp.obj"
+},
+{
+  "directory": "C:/Users/Adam/Dev/Projects/Tutorial/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe -DGLFW_DLL -IC:/Users/Adam/Dev/Projects/Tutorial/include -g -o CMakeFiles\\Tutorial.dir\\src\\gl.c.obj -c C:\\Users\\Adam\\Dev\\Projects\\Tutorial\\src\\gl.c",
+  "file": "C:/Users/Adam/Dev/Projects/Tutorial/src/gl.c",
+  "output": "C:/Users/Adam/Dev/Projects/Tutorial/build/CMakeFiles/Tutorial.dir/src/gl.c.obj"
+},
+{
+  "directory": "C:/Users/Adam/Dev/Projects/Tutorial/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe -DGLFW_DLL -IC:/Users/Adam/Dev/Projects/Tutorial/include -g -std=gnu++17 -o CMakeFiles\\Tutorial.dir\\src\\stb_image_implementation.cpp.obj -c C:\\Users\\Adam\\Dev\\Projects\\Tutorial\\src\\stb_image_implementation.cpp",
+  "file": "C:/Users/Adam/Dev/Projects/Tutorial/src/stb_image_implementation.cpp",
+  "output": "C:/Users/Adam/Dev/Projects/Tutorial/build/CMakeFiles/Tutorial.dir/src/stb_image_implementation.cpp.obj"
+},
+{
+  "directory": "C:/Users/Adam/Dev/Projects/Tutorial/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe -DGLFW_DLL -IC:/Users/Adam/Dev/Projects/Tutorial/include -g -std=gnu++17 -o CMakeFiles\\2d_Physics.dir\\src\\2d_Physics.cpp.obj -c C:\\Users\\Adam\\Dev\\Projects\\Tutorial\\src\\2d_Physics.cpp",
+  "file": "C:/Users/Adam/Dev/Projects/Tutorial/src/2d_Physics.cpp",
+  "output": "C:/Users/Adam/Dev/Projects/Tutorial/build/CMakeFiles/2d_Physics.dir/src/2d_Physics.cpp.obj"
+},
+{
+  "directory": "C:/Users/Adam/Dev/Projects/Tutorial/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe -DGLFW_DLL -IC:/Users/Adam/Dev/Projects/Tutorial/include -g -o CMakeFiles\\2d_Physics.dir\\src\\gl.c.obj -c C:\\Users\\Adam\\Dev\\Projects\\Tutorial\\src\\gl.c",
+  "file": "C:/Users/Adam/Dev/Projects/Tutorial/src/gl.c",
+  "output": "C:/Users/Adam/Dev/Projects/Tutorial/build/CMakeFiles/2d_Physics.dir/src/gl.c.obj"
+},
+{
+  "directory": "C:/Users/Adam/Dev/Projects/Tutorial/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe -DGLFW_DLL -IC:/Users/Adam/Dev/Projects/Tutorial/include -g -std=gnu++17 -o CMakeFiles\\2d_Physics.dir\\src\\stb_image_implementation.cpp.obj -c C:\\Users\\Adam\\Dev\\Projects\\Tutorial\\src\\stb_image_implementation.cpp",
+  "file": "C:/Users/Adam/Dev/Projects/Tutorial/src/stb_image_implementation.cpp",
+  "output": "C:/Users/Adam/Dev/Projects/Tutorial/build/CMakeFiles/2d_Physics.dir/src/stb_image_implementation.cpp.obj"
+}
+]

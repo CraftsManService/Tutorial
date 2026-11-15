@@ -1,0 +1,4 @@
+C:/Users/Adam/Dev/Projects/Tutorial/build/CMakeFiles/Tutorial.dir
+C:/Users/Adam/Dev/Projects/Tutorial/build/CMakeFiles/2d_Physics.dir
+C:/Users/Adam/Dev/Projects/Tutorial/build/CMakeFiles/edit_cache.dir
+C:/Users/Adam/Dev/Projects/Tutorial/build/CMakeFiles/rebuild_cache.dir

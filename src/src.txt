@@ -1,0 +1,90 @@
+glm::vec3 wallColor(0.33f, 0.37f, 0.43f);
+    glm::vec3 killColor(0.8f, 0.1f, 0.1f);
+    glm::vec3 respawnColor(0.21f, 0.96f, 0.0f);
+    glm::vec3 winColor(1.0, 0.91, 0.01f);
+    glm::vec3 jumpColor(0.98f, 0.72f, 0.01f);
+
+    int currentLevel = 1;
+    std::vector<Object2D> level1_wall;
+    std::vector<Object2D> level1_kill;
+    std::vector<Object2D> level1_step;
+    std::vector<Object2D> level1_jump;
+    std::vector<Object2D> level1_respawn;
+
+    level1_wall.emplace_back(0.0f, 550.0f, 25.0f, 80.0f, false, wallColor, 5.0f, 800.0f, 600.0f);
+    level1_wall.emplace_back(75.0f, 515.0f, 25.0f, 155.0f, false, wallColor, 5.0f, 800.0f, 600.0f);
+    level1_wall.emplace_back(150.0f, 485.0f, 25.0f, 225.0f, false, wallColor, 5.0f, 800.0f, 600.0f);
+    level1_wall.emplace_back(300.0f, 350.0f, 175.0f, 25.0f, false, wallColor, 5.0f, 800.0f, 600.0f);
+    level1_wall.emplace_back(0.0f, 600.0f, 800.0f, 25.0f, false, wallColor, 0.1f, 800.0f, 600.0f);
+    level1_kill.emplace_back(0.0f, 1000.0f, 2000.0f, 25.0f, false, killColor, 0.1f, 800.0f, 600.0f);
+    level1_kill.emplace_back(200.0f, 585.0f, 400.0f, 15.0f, false, killColor, 0.1f, 800.0f, 600.0f);
+    level1_jump.emplace_back(367.5f, 336.0f, 25.0f, 5.0f, false, jumpColor, 0.1f, 800.0f, 600.0f);
+    level1_step.emplace_back(450.0f, 150.0f, 50.0f, 15.0f, false, wallColor, 5.0f, 800.0f, 600.0f);
+    Object2D level1_win(700.0f, 150.0f, 50.0f, 15.0f, false, glm::vec3(1.0, 0.91, 0.01f), 5.0f, 800.0f, 600.0f);
+
+    std::vector<Object2D> level2_wall;
+    std::vector<Object2D> level2_kill;
+    std::vector<Object2D> level2_step;
+    std::vector<Object2D> level2_jump;
+    std::vector<Object2D> level2_respawn;
+
+    level2_wall.emplace_back(50.0f,  550.0f, 150.0f, 25.0f, false, wallColor, 5.0f, 800.0f, 600.0f);
+    level2_wall.emplace_back(210.0f, 500.0f, 60.0f,  20.0f, false, wallColor, 5.0f, 800.0f, 600.0f);
+    level2_wall.emplace_back(330.0f, 450.0f, 60.0f,  20.0f, false, wallColor, 5.0f, 800.0f, 600.0f);
+    level2_wall.emplace_back(475.0f, 450.0f, 120.0f, 25.0f, false, wallColor, 5.0f, 800.0f, 600.0f);
+    level2_respawn.emplace_back(475.0f, 432.5f, 30.0f, 10.0f, false, respawnColor, 0.1f, 800.0f, 600.0f);
+    level2_wall.emplace_back(610.0f, 450.0f, 60.0f,  25.0f, false, wallColor, 5.0f, 800.0f, 600.0f);
+    level2_jump.emplace_back(610.0f, 435.0f, 30.0f,  5.0f,  false, jumpColor, 0.1f, 800.0f, 600.0f);
+    level2_wall.emplace_back(720.0f, 240.0f, 60.0f,  25.0f, false, wallColor, 5.0f, 800.0f, 600.0f);
+    level2_jump.emplace_back(720.0f, 225.0f, 30.0f,  5.0f,  false, jumpColor, 0.1f, 800.0f, 600.0f);
+    level2_wall.emplace_back(780.0f, 120.0f, 25.0f, 250.0f, false, wallColor, 5.0f, 800.0f, 600.0f);
+    level2_wall.emplace_back(620.0f, 60.0f,  80.0f,  20.0f, false, wallColor, 5.0f, 800.0f, 600.0f);
+    level2_step.emplace_back(480.0f, 60.0f,  60.0f,  15.0f, false, wallColor, 5.0f, 800.0f, 600.0f);
+    level2_step.emplace_back(220.0f, 60.0f,  60.0f,  15.0f, false, wallColor, 5.0f, 800.0f, 600.0f);
+    level2_kill.emplace_back(270.0f, 490.0f, 20.0f,  15.0f, false, killColor, 0.1f, 800.0f, 600.0f);
+    level2_kill.emplace_back(400.0f, 700.0f, 2500.0f, 40.0f, false, killColor, 0.1f, 800.0f, 600.0f);
+    Object2D level2_win(80.0f, 50.0f, 50.0f, 15.0f, false, winColor, 5.0f, 800.0f, 600.0f);
+
+
+
+    // Collision
+        if(currentLevel == 1) {
+            for(auto& obj : level1_wall) {myObject.checkCollision(obj, false);}
+            for(auto& obj : level1_kill) {myObject.checkCollision(obj, false); myObject.checkDamage(obj);}
+            for(auto& obj : level1_jump) {myObject.checkCollision(obj, false); myObject.checkJumpBoost(obj);}
+            for(auto& obj : level1_step) {myObject.checkCollision(obj, true);}
+
+            level1_step[0].stepObject(glm::vec2(600.0f, 150.0f), 50.0f, deltaTime);
+
+            if(myObject.collision(level1_win)) {currentLevel = 2; myObject.setStartPos(glm::vec2(-50.0f, 550.0f));}
+        } else if(currentLevel == 2) {
+            for(auto& obj : level2_wall)    {myObject.checkCollision(obj, false);}
+            for(auto& obj : level2_kill)    {myObject.checkCollision(obj, false); myObject.checkDamage(obj);}
+            for(auto& obj : level2_jump)    {myObject.checkCollision(obj, false); myObject.checkJumpBoost(obj);}
+            for(auto& obj : level2_respawn) {myObject.checkRespawn(obj);}
+            for(auto& obj : level2_step)    {myObject.checkCollision(obj, true);}
+
+            level2_step[0].stepObject(glm::vec2(380.0f, 60.0f), 75.0f, deltaTime);
+            level2_step[1].stepObject(glm::vec2(300.0f, 60.0f), 90.0f, deltaTime);
+
+            if(myObject.collision(level2_win)) {currentLevel = 3; myObject.setStartPos(glm::vec2(-50.0f, 550.0f));}
+        }
+
+
+
+        // Draw
+        myObject.Draw(myShader);
+        if(currentLevel == 1) {
+            for(auto& obj : level1_kill) {obj.Draw(myShader);}
+            for(auto& obj : level1_wall) {obj.Draw(myShader);}
+            for(auto& obj : level1_step) {obj.Draw(myShader);}
+            for(auto& obj : level1_jump) {obj.Draw(myShader);}
+            level1_win.Draw(myShader);
+        } else if(currentLevel == 2) {
+            for(auto& obj : level2_kill)    {obj.Draw(myShader);}
+            for(auto& obj : level2_wall)    {obj.Draw(myShader);}
+            for(auto& obj : level2_step)    {obj.Draw(myShader);}
+            for(auto& obj : level2_jump)    {obj.Draw(myShader);}
+            for(auto& obj : level2_respawn) {obj.Draw(myShader);}
+            level2_win.Draw(myShader);
+        }
