@@ -343,7 +343,7 @@ class Level2D {
             for(int i = 0; i < stepInfo.size(); i++) {stepObjects[i].stepObject(glm::vec2(stepInfo[i].x, stepInfo[i].y), stepInfo[i].z, deltaTime);}
             for(auto& obj : walls) {player.checkCollision(obj, false);}
             for(auto& obj : killBricks) {player.checkCollision(obj, false); player.checkDamage(obj);}
-            for(auto& obj : jumpPads) {player.checkCollision(obj, false); player.checkJumpBoost(obj);}
+            for(auto& obj : jumpPads) {player.checkJumpBoost(obj);}
             for(auto& obj : respawnPoints) {player.checkCollision(obj, false); player.checkRespawn(obj);}
             for(auto& obj : stepObjects) {player.checkCollision(obj, true);}
             if(player.collision(winBlock)) {currentLevel++; player.setStartPos(newSpawn);}
