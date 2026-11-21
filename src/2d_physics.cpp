@@ -60,7 +60,10 @@ int main() {
     level2.step(150.0f, 400.0f, 50.0f, 15.0f, glm::vec2(150.0f, 300.0f), 100.0f);
     level2.wall(300.0f, 300.0f, 250.0f, 25.0f);
     level2.killBrick(325.0f, 275.0f, 25.0f, 50.0f);
-    level2.wall(322.5f, 250.0f, 30.0f, 10.0f);
+    level2.wall(325.0f, 250.0f, 30.0f, 10.0f);
+    level2.box(350.0f, 200.0f, 25.0f, 25.0f, 1.0f);
+    level2.button(300.0f, 580.0f, 50.0f, 20.0f, 1);
+    level2.door(375.0f, 540.0f, 25.0f, 100.0f, 1, glm::vec2(375.0f, 480.0f), 100.0f);
 
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 

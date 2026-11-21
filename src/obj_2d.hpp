@@ -4,6 +4,7 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 #include <vector>
+#include <algorithm>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -110,6 +111,7 @@ public:
     }
 
     void Physics(float deltaTime, float friction) {
+        acceleration = glm::vec2(0.0f);
         // if(position.y <= -0.95) {isGrounded = true;}
 
         if(jumpCooldownTimer > 0.0f) { jumpCooldownTimer -= deltaTime;}
@@ -295,6 +297,74 @@ public:
         return false;
     }
 
+    void checkBox(Object2D &other, float deltaTime) {
+        float thisHalfW = size.x / 2.0f;
+        float thisHalfH = size.y / 2.0f;
+        float otherHalfW = other.size.x / 2.0f;
+        float otherHalfH = other.size.y / 2.0f;
+
+        float thisRight = position.x + thisHalfW;
+        float thisLeft = position.x - thisHalfW;
+        float thisTop = position.y - thisHalfH;
+        float thisBottom = position.y + thisHalfH;
+
+        float otherRight = other.position.x + otherHalfW;
+        float otherLeft = other.position.x - otherHalfW;
+        float otherTop = other.position.y - otherHalfH;
+        float otherBottom = other.position.y + otherHalfH;
+
+        bool collisionX = thisRight >= otherLeft && thisLeft <= otherRight;
+        bool collisionY = thisBottom >= otherTop && thisTop <= otherBottom;
+
+        if (collisionX && collisionY) {
+            float overlapX = std::min(thisRight - otherLeft, otherRight - thisLeft);
+            float overlapY = std::min(thisBottom - otherTop, otherBottom - thisTop);
+
+            if (overlapX < overlapY) {
+                other.velocity.x = velocity.x / other.mass;
+            }
+        }
+    }
+
+    bool checkButton(Object2D &other, float deltaTime, int id) {
+        float thisHalfW = size.x / 2.0f;
+        float thisHalfH = size.y / 2.0f;
+        float otherHalfW = other.size.x / 2.0f;
+        float otherHalfH = other.size.y / 2.0f;
+
+        float thisRight = position.x + thisHalfW;
+        float thisLeft = position.x - thisHalfW;
+        float thisTop = position.y - thisHalfH;
+        float thisBottom = position.y + thisHalfH;
+
+        float otherRight = other.position.x + otherHalfW;
+        float otherLeft = other.position.x - otherHalfW;
+        float otherTop = other.position.y - otherHalfH;
+        float otherBottom = other.position.y + otherHalfH;
+
+        bool collisionX = thisRight >= otherLeft && thisLeft <= otherRight;
+        bool collisionY = thisBottom + 2.0f >= otherTop && thisTop <= otherBottom;
+
+        if (collisionX && collisionY) {
+            inCollision = true;
+            // Find out how deep the overlap is on each axis
+            float overlapX = std::min(thisRight - otherLeft, otherRight - thisLeft);
+            float overlapY = std::min(thisBottom - otherTop, otherBottom - thisTop);
+
+            if (overlapX > overlapY) {
+                other.glide(other.startPos + glm::vec2(0.0f, 10.0f), 50.0f, deltaTime);
+                other.activateID(id);
+                return true;
+            }
+            other.glide(other.startPos, 50.0f, deltaTime);
+            other.deactivateID(id);
+            return false;
+        }
+        other.glide(other.startPos, 50.0f, deltaTime);
+        other.deactivateID(id);
+        return false;
+    }
+
     void stepObject(glm::vec2 end, float step, float deltaTime) {
         static glm::vec2 start = startPos;
         glm::vec2 target = heading ? end : startPos;
@@ -316,7 +386,50 @@ public:
         velocity = glm::vec2(0.0f, 0.0f);
     }
 
+    void glide(glm::vec2 pos, float step, float deltaTime) {
+        if (glm::distance(pos, position) < 1.0f) return;
+        glm::vec2 direction = glm::normalize(pos - position);
+        position += direction * step * deltaTime;
+    }
+
+    void activateID(int id) {
+        if(id - 1 < IDs.size()) {
+            if(IDs[id - 1] == true) {
+                return;
+            } else {
+                IDs[id - 1] = true;
+            }
+        } else {
+            IDs.emplace_back(true);
+        }
+    }
+
+    void deactivateID(int id) {
+        if(id - 1 < IDs.size()) {
+            if(IDs[id - 1] == false) {
+                return;
+            } else {
+                IDs[id - 1] = false;
+            }
+        } else {
+            IDs.emplace_back(false);
+        }
+    }
+
+    bool checkID(int id) {
+        if(id - 1 < IDs.size()) {
+            return IDs[id - 1];
+        }
+        return false;
+    }
+
+    void stepDoor(int id, glm::vec2 end, float step, float deltaTime) {
+        if(checkID(id)) {glide(end, step, deltaTime);}
+        else {glide(startPos, step, deltaTime);}
+    }
+
 private:
+    inline static std::vector<bool> IDs;
     unsigned int VAO, VBO, EBO;
     bool inCollision = false;
     glm::vec2 startPos = glm::vec2(0, 0);
@@ -324,12 +437,6 @@ private:
 
 class Level2D {
     public:
-        std::vector<Object2D> walls;
-        std::vector<Object2D> killBricks;
-        std::vector<Object2D> jumpPads;
-        std::vector<Object2D> respawnPoints;
-        std::vector<Object2D> stepObjects;
-
         Level2D(Object2D& player, Shader& shader, float scrW, float scrH) : scrWidth(scrW), scrHeight(scrH), player(player), shader(shader) {}
 
         void wall(float x, float y, float width, float height) {walls.emplace_back(x, y, width, height, false, wallColor, 0.1f, scrWidth, scrHeight);}
@@ -338,33 +445,61 @@ class Level2D {
         void respawnPoint(float x, float y, float width, float height) {respawnPoints.emplace_back(x, y, width, height, false, respawnColor, 0.1f, scrWidth, scrHeight);}
         void win(float x, float y, float width, float height) {winBlock = Object2D(x, y, width, height, false, winColor, 0.1f, scrWidth, scrHeight);}
         void step(float x, float y, float width, float height, glm::vec2 end, float step) {stepObjects.emplace_back(x, y, width, height, false, wallColor, 0.1f, scrWidth, scrHeight); stepInfo.emplace_back(glm::vec3(end, step));}
+        void box(float x, float y, float width, float height, float mass) {boxObjects.emplace_back(x, y, width, height, false, boxColor, mass, scrWidth, scrHeight);}
+        void button(float x, float y, float width, float height, int id) {buttons.emplace_back(x, y, width, height, false, buttonColor, 0.1f, scrWidth, scrHeight); buttonInfo.emplace_back(id);}
+        void door(float x, float y, float width, float height, float id, glm::vec2 end, float step) {doors.emplace_back(x, y, width, height, false, wallColor, 0.1f, scrWidth, scrHeight); doorInfo.emplace_back(glm::vec4(end, step, id));}
 
         void collisions(float& currentLevel, float deltaTime, glm::vec2 newSpawn) {
             for(int i = 0; i < stepInfo.size(); i++) {stepObjects[i].stepObject(glm::vec2(stepInfo[i].x, stepInfo[i].y), stepInfo[i].z, deltaTime);}
+            for(int i = 0; i < doorInfo.size(); i++) {doors[i].stepDoor(doorInfo[i].w, glm::vec2(doorInfo[i].x, doorInfo[i].y), doorInfo[i].z, deltaTime);}
+            for(int i = 0; i < buttonInfo.size(); i++) {player.checkButton(buttons[i], deltaTime, buttonInfo[i]);}
             for(auto& obj : walls) {player.checkCollision(obj, false);}
             for(auto& obj : killBricks) {player.checkCollision(obj, false); player.checkDamage(obj);}
             for(auto& obj : jumpPads) {player.checkJumpBoost(obj);}
             for(auto& obj : respawnPoints) {player.checkCollision(obj, false); player.checkRespawn(obj);}
             for(auto& obj : stepObjects) {player.checkCollision(obj, true);}
+            for(auto& obj : boxObjects) {player.checkBox(obj, deltaTime); player.checkCollision(obj, false); obj.Physics(deltaTime, 15.0f);}
+            for(auto& obj : buttons) {player.checkCollision(obj, true);}
+            for(auto& obj : doors) {player.checkCollision(obj, true);}
             if(player.collision(winBlock)) {currentLevel++; player.setStartPos(newSpawn);}
+        }
+
+        void boxCollisions() {
+            for(auto& box : boxObjects) {
+                for(auto& wall : walls) {box.checkCollision(wall, false);}
+                for(auto& step : stepObjects) {box.checkCollision(step, true);}
+            }
         }
 
         void draw() {
             for(auto& obj : killBricks) {obj.Draw(shader);}
-            for(auto& obj : walls) {obj.Draw(shader);}
             for(auto& obj : jumpPads) {obj.Draw(shader);}
             for(auto& obj : respawnPoints) {obj.Draw(shader);}
             for(auto& obj : stepObjects) {obj.Draw(shader);}
+            for(auto& obj : boxObjects) {obj.Draw(shader);}
+            for(auto& obj : buttons) {obj.Draw(shader);}
+            for(auto& obj : doors) {obj.Draw(shader);}
+            for(auto& obj : walls) {obj.Draw(shader);}
             winBlock.Draw(shader);
             player.Draw(shader);
         }
 
         void render(float& currentLevel, float deltaTime, glm::vec2 newSpawn) {
             collisions(currentLevel, deltaTime, newSpawn);
+            boxCollisions();
             draw();
         }
 
     private:
+        std::vector<Object2D> walls;
+        std::vector<Object2D> killBricks;
+        std::vector<Object2D> jumpPads;
+        std::vector<Object2D> respawnPoints;
+        std::vector<Object2D> stepObjects;
+        std::vector<Object2D> boxObjects;
+        std::vector<Object2D> buttons;
+        std::vector<Object2D> doors;
+
         float scrWidth;
         float scrHeight;
         glm::vec3 wallColor{0.33f, 0.37f, 0.43f};
@@ -372,9 +507,13 @@ class Level2D {
         glm::vec3 respawnColor{0.21f, 0.96f, 0.0f};
         glm::vec3 winColor{1.0f, 0.91f, 0.01f};
         glm::vec3 jumpColor{0.98f, 0.72f, 0.01f};
+        glm::vec3 boxColor{0.5f, 0.33f, 0.0f};
+        glm::vec3 buttonColor{0.01f, 0.01f, 0.01f};
         Object2D& player;
         Shader& shader;
         std::vector<glm::vec3> stepInfo;
+        std::vector<glm::vec4> doorInfo;
+        std::vector<int> buttonInfo;
         Object2D winBlock{0, 0, 0, 0, false, winColor, 0.1f, scrWidth, scrHeight};
 };
 
